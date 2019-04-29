@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HomeWorkSVG</title>
+	<script  src="https://code.jquery.com/jquery-3.4.0.min.js"
+	  		 integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
+ 		     crossorigin="anonymous"></script>
+	<style type="text/css">
+		#mySVG{
+			display: block;
+			border:solid 1px red;
+		}
+		line, circle {
+			stroke-width: 2;
+		}
+		circle{
+			stroke: silver;
+		}
+		#primeButtons{
+			display: inline;
+			margin-left: 80px;
+		}
+		#DialogWindow {
+			
+			width: 200px;
+			height: 100px;
+			margin: 30px;
+			border: solid 1px grey;
+			padding: 10px;
+		}
+		#Jvalue {
+			display: inline-block;
+			margin-top: 15px;
+			margin-bottom: 35px;
+		}
+		#DialogWindow input[type="button"] {width: 70px;}
+	</style>
+</head>
+<body>
+	<input type="button" value="Generate" >
+<div id="primeButtons">
+	<span>Dots Colors</span>
+	<input id="circlesColor" type="color" >
+
+	<span>Lines Colors</span>
+	<input id="linesColor" type="color">
+</div>
+	<svg id="mySVG" width="500px" height="300px">
+		
+	</svg>
+
+	
+</body>
+<script type="text/javascript">
+	$(document).ready(function(){
+
+	var W = $("#mySVG").width();
+	var H = $("#mySVG").height();
+
+	var circleColor = $("#circlesColor").val();
+	var lineColor = $("#linesColor").val();
+
+	//set the colors of the SVG elements before you generate the graph  --> you need to comment the dynamic-change piece of code below
+	//$("#circlesColor").change(function(){circleColor = $(this).val()});
+	//$("#linesColor").change(function(){lineColor = $(this).val()});
+	
+	//dynamically changes the color of the SVG elements(as we go)
+	// ---> you need to comment this and uncomment the piece of code above if you want to set the colors before drawing the graph
+	$("#circlesColor").change(function(){$("circle").css("fill", $(this).val())});
+	$("#linesColor").change(function(){$("line").css("stroke", $(this).val())});
+
+	var data = [];
+	$('input[type="button"]').click(function(){
+		document.getElementById("mySVG").innerHTML = "";
+		
+		data = [];
+		AddPoints();
+		ShowPoints();
+
+		$("circle").on("click",function(){
+			var currentCircle = $(this).attr("id");
+			var indexOfLineAndCircle = currentCircle.substr(-1);
+			var lineBeforeId = "line_" + (indexOfLineAndCircle - 1);
+			var lineAfterId = "line_" + indexOfLineAndCircle;
+			$("body").append('<div id="DialogWindow"><span id="Jvalue"><strong>Y:</strong> <input id="NewJ" type="text"/></span><br><input style="float: left;"type="button" id="Cancel" value="Cancel"/><input style="float: right;" type="button" id="OkButton" value="OK"/></div>');
+			$("#OkButton").click(
+				function(){
+					var newValue = $("#NewJ").val();
+					if(isNaN(newValue)){
+						alert("Please enter a number");
+						$("#NewJ").val("");
+					}
+					else{
+						
+						$('#' + currentCircle).attr("cy",newValue);
+						$('#' + lineAfterId).attr("y1",newValue);
+						$('#' + lineBeforeId).attr("y2",newValue);
+						
+						}
+					
+				});
+			$("#Cancel").click(
+				function(){
+					$("DialogWindow").remove();
+				});
+		});
+		
+	})
+
+	function getRndInteger(min, max){
+		return Math.floor(Math.random() * (max - min + 1)) + min ;
+	}
+	
+	function AddPoints(){
+		for(var j = 0; j < W; j +=25){
+			var tmp ={X:null, Y:null};
+
+			//generating the first random Y-value among the whole range of the Height property
+			if(j==0){
+				tmp.Y = getRndInteger(0,H);
+			}
+			//then limiting the next Y-values to be in steps of +25px && -25px
+			else{
+				//getting the value of the previous element in the array, so we can go from there with generating the next one
+				var previousY = data[((j/25) -1 )].Y;
+				var min = previousY - 25;
+				var max = previousY + 25;
+				//using a ternary operator to secure not going out of the boundaries of the SVG field
+				nextIndex =getRndInteger(min < 0 ? 0 : min,max > H ? H : max);
+				tmp.Y =	nextIndex;
+			}
+			tmp.X = getRndInteger(j,(20 + j));
+			data.push(tmp);
+		}
+	}
+
+	function ShowPoints(){
+		for(var i = 0; i < data.length; i++){
+			var current = data[i];
+			var result = "";
+			result += '<circle id="circle_'+ i +'"style="fill: ' + circleColor + ';" cx="'+ (current.X) +'" cy="'+ (current.Y) +'" r="4"/>';
+			if(i < (data.length - 1)){
+				result += '<line id="line_'+ i +'" style="stroke: ' + lineColor + ';" x1="'+ ((current.X)+5)  +'" y1="'+ (current.Y)  +'" x2="'+ (data[(i + 1)].X) +'" y2="'+ (data[(i + 1)].Y) +'"/>';
+			}
+			document.getElementById("mySVG").innerHTML += result;
+		}
+	}
+});
+</script>
+</html>
