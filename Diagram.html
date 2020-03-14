@@ -4,91 +4,43 @@
 	<title>HomeWorkSVG</title>
 	<script  src="https://code.jquery.com/jquery-3.4.0.min.js"
 	  		 integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
- 		     crossorigin="anonymous"></script>
-	<style type="text/css">
-		#content{
-			margin: 40px auto;
-			width:800px;
-			}
-		#mySVG{
-			border: solid;
-			position: relative;
-		}
-		#generateButton{
-			margin: 20px 10px 50px;
-			height: 60px;
-			width: 200px;
-			color: lightgrey;
-			background-color: green;
-			border-radius: 5px;
-		}
-		#colorControl{
-			border: dotted 0.5px;
-			border-radius: 5px;
-			padding: 30px;
-		}
-		#circlesColor, #linesColor{
-			width: 100px;
-		}
-		line, circle {
-			stroke-width: 2;
-		}
-		circle{
-			stroke: silver;
-		}
-		#primeButtons{
-			float:right
-		}
-		#DialogWindow {
-			width: 200px;
-			height: 120px;
-			margin: 30px 80px;
-			border: dotted 1px grey;
-			padding: 5px 70px;
-		}
-		#Jvalue{
-			margin-left: 50px;
-		}
-		#CancelButton, #OkButton{
-			background-color: silver;
-			width: 70px;
-			height: 30px;
-			margin: 10px;
-		}
-		#NewY{
-			width: 40px;
-		}
-		#NewY:active{
-			background-color:silver;
-			}
-			
-	</style>
+ 		     crossorigin="anonymous">
+	</script>
+	 <link rel="stylesheet" type="text/css" href="styles.css">
+	
 </head>
 <body>
 
-<div id="content">
-	<span style="position:absolute; margin-left:-20px;">Y</span>
-	<svg id="mySVG" width="500px" height="300px"></svg>
-	<div id="primeButtons">
-		<span>
-			<input id="generateButton" type="button" value="Generate new diagram">
-		</span></br>
-		<div id="colorControl">
-			<span>Dots&nbsp Colors
-				<input id="circlesColor" type="color">
-			</span>
-				</br>
-			<span>Lines Colors
-				<input id="linesColor" type="color">
-			</span>
+	<div id="content">
+		<span class="XandY" style="margin-left:-20px;">Y</span>
+		
+		<svg id="mySVG"></svg>
+		
+		<div id="primeButtons">
 			
-			</br>
+			
+			<div id="colorControl">
+				<span>Dots&nbsp Colors
+					<input id="circlesColor" type="color">
+				</span>
+				</br>
+				<span>Lines Colors
+					<input id="linesColor" type="color">
+				</span>
+				</br>
+				</br>
+				
 			<button id="colorChange">Change</button>
+			</div>
 		</div>
+		</br>
+		
+		<span class="XandY" style="margin-left:500px;">X</span>
+		<span>
+				<input id="generateButton" type="button" value="Generate new diagram">
+			</span>
+			</br>
 	</div>
-	</br>
-	<span style="position:absolute;margin-left:500px;" >X</span>
-</div>
 </body>
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -104,18 +56,7 @@
 
 	var data = [];
 	$("#generateButton").click(function(){
-		document.getElementById("mySVG").innerHTML = "";
-		dialogWindowHTML = '<div id="DialogWindow">' +
-								'<p>Set a new value for "Y" in px</p>' +
-								'<span id="Jvalue">' +
-								  '<strong>Y:</strong>' +
-								  '<input id="NewY" type="text"/>' +
-								  '<span>px<span/>' +
-								'</span>' +
-								'<br>' + 
-								'<input type="button" id="OkButton" value="OK"/>' +
-								'<input type="button" id="CancelButton" value="Cancel"/>'
-						   '</div>';
+		document.getElementById("mySVG").innerHTML = "";		
 		data = [];
 		AddPoints();
 		ShowPoints();
@@ -131,7 +72,18 @@
 				$("#DialogWindow").remove();
 			}
 			
-			$("#content").append(dialogWindowHTML);
+			dialogWindowHTML = '<div id="DialogWindow">' +
+								'<p>Set a new "Y" for point '+ (indexOfLineAndCircle - 0) +'</p>' +
+								'<span id="Jvalue">' +
+								  '<strong>Y:</strong>' +
+								  '<input id="NewY" type="text"/>' +
+								  '<span>px<span/>' +
+								'</span>' +
+								'<br>' + 
+								'<input type="button" id="OkButton" value="OK"/>' +
+								'<input type="button" id="CancelButton" value="Cancel"/>'
+						   '</div>';
+			$("#colorControl").after(dialogWindowHTML);
 			
 			$("#OkButton").click(
 				function(){
