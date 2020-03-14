@@ -81,6 +81,9 @@
 			<span>Lines Colors
 				<input id="linesColor" type="color">
 			</span>
+			
+			</br>
+			<button id="colorChange">Change</button>
 		</div>
 	</div>
 	</br>
@@ -95,18 +98,12 @@
 
 	var circleColor = $("#circlesColor").val();
 	var lineColor = $("#linesColor").val();
-
-	//set the colors of the SVG elements before you generate the graph  --> you need to comment the dynamic-change piece of code below
-	$("#circlesColor").change(function(){circleColor = $(this).val()});
-	$("#linesColor").change(function(){lineColor = $(this).val()});
 	
-	//dynamically changes the color of the SVG elements(as we go)
-	// ---> you need to comment this and uncomment the piece of code above if you want to set the colors before drawing the graph
 	//$("#circlesColor").change(function(){$("circle").css("fill", $(this).val())});
 	//$("#linesColor").change(function(){$("line").css("stroke", $(this).val())});
 
 	var data = [];
-	$('input[type="button"]').click(function(){
+	$("#generateButton").click(function(){
 		document.getElementById("mySVG").innerHTML = "";
 		dialogWindowHTML = '<div id="DialogWindow">' +
 								'<p>Set a new value for "Y" in px</p>' +
@@ -141,27 +138,24 @@
 					var newValue = $("#NewY").val();
 					
 					if(isNaN(newValue)){
-						alert("Please enter a number");
+						alert("Please enter a number!");
 						$("#NewY").val("");
 					}
-					if(newValue > 300){
-						$('#' + currentCircle).attr("cy",300);
-						$('#' + lineAfterId).attr("y1",300);
-						$('#' + lineBeforeId).attr("y2",300);
+					if(newValue >= 300){
+						$('#' + currentCircle).attr("cy",299);
+						$('#' + lineAfterId).attr("y1",299);
+						$('#' + lineBeforeId).attr("y2",299);
 					}
 					else if(newValue < 0){
-						$('#' + currentCircle).attr("cy",0);
-						$('#' + lineAfterId).attr("y1",0);
-						$('#' + lineBeforeId).attr("y2",0);
+						$('#' + currentCircle).attr("cy",1);
+						$('#' + lineAfterId).attr("y1",1);
+						$('#' + lineBeforeId).attr("y2",1);
 					}
-					else{
-						
+					else{						
 						$('#' + currentCircle).attr("cy",newValue);
 						$('#' + lineAfterId).attr("y1",newValue);
-						$('#' + lineBeforeId).attr("y2",newValue);
-						
+						$('#' + lineBeforeId).attr("y2",newValue);						
 					}
-					
 				});
 			$("#CancelButton").click(
 				function(){
@@ -170,6 +164,11 @@
 		});
 		
 	})
+	document.getElementById ("colorChange").addEventListener ("click", 
+	function ColorChange(){
+	  $("circle").css("fill", $("#circlesColor").val());
+	$("line").css("stroke", $("#linesColor").val());
+	});
 
 	function getRndInteger(min, max){
 		return Math.floor(Math.random() * (max - min + 1)) + min ;
