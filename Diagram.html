@@ -41,23 +41,27 @@
 		}
 		#DialogWindow {
 			width: 200px;
-			height: 60px;
+			height: 120px;
 			margin: 30px 80px;
-			border: solid 1px grey;
-			padding: 30px;
+			border: dotted 1px grey;
+			padding: 5px 70px;
 		}
 		#Jvalue{
-			margin-top: 20px;
-			width: 50px;
+			margin-left: 50px;
 		}
 		#CancelButton, #OkButton{
 			background-color: silver;
 			width: 70px;
 			height: 30px;
+			margin: 10px;
 		}
 		#NewY{
 			width: 40px;
 		}
+		#NewY:active{
+			background-color:silver;
+			}
+			
 	</style>
 </head>
 <body>
@@ -93,28 +97,27 @@
 	var lineColor = $("#linesColor").val();
 
 	//set the colors of the SVG elements before you generate the graph  --> you need to comment the dynamic-change piece of code below
-	//$("#circlesColor").change(function(){circleColor = $(this).val()});
-	//$("#linesColor").change(function(){lineColor = $(this).val()});
+	$("#circlesColor").change(function(){circleColor = $(this).val()});
+	$("#linesColor").change(function(){lineColor = $(this).val()});
 	
 	//dynamically changes the color of the SVG elements(as we go)
 	// ---> you need to comment this and uncomment the piece of code above if you want to set the colors before drawing the graph
-	$("#circlesColor").change(function(){$("circle").css("fill", $(this).val())});
-	$("#linesColor").change(function(){$("line").css("stroke", $(this).val())});
+	//$("#circlesColor").change(function(){$("circle").css("fill", $(this).val())});
+	//$("#linesColor").change(function(){$("line").css("stroke", $(this).val())});
 
 	var data = [];
 	$('input[type="button"]').click(function(){
 		document.getElementById("mySVG").innerHTML = "";
 		dialogWindowHTML = '<div id="DialogWindow">' +
-								'<span>Set a new value for "Y" in px</span> </br>'+
-								
+								'<p>Set a new value for "Y" in px</p>' +
 								'<span id="Jvalue">' +
-								  '<strong>Y: </strong>' +
+								  '<strong>Y:</strong>' +
 								  '<input id="NewY" type="text"/>' +
 								  '<span>px<span/>' +
 								'</span>' +
 								'<br>' + 
-								'<input type="button" id="CancelButton" value="Cancel"/>' +
 								'<input type="button" id="OkButton" value="OK"/>' +
+								'<input type="button" id="CancelButton" value="Cancel"/>'
 						   '</div>';
 		data = [];
 		AddPoints();
@@ -122,8 +125,9 @@
 
 		$("circle").on("click",function(){
 			var currentCircle = $(this).attr("id");
-			var indexOfLineAndCircle = currentCircle.substr(-1);
-			var lineBeforeId = "line_" + (indexOfLineAndCircle - 1);
+			var indexOfLineAndCircle = currentCircle.substr(-2);
+			var lineBeforeId =""
+			 indexOfLineAndCircle < 10 ? lineBeforeId ="line_0" + (indexOfLineAndCircle - 1):lineBeforeId ="line_" + (indexOfLineAndCircle - 1);
 			var lineAfterId = "line_" + indexOfLineAndCircle;
 			
 			if($("#DialogWindow").length ){
@@ -198,11 +202,19 @@
 		for(var i = 0; i < data.length; i++){
 			var current = data[i];
 			var result = "";
-			result += '<circle id="circle_'+ i +'"style="fill: ' + circleColor + ';" cx="'+ (current.X) +'" cy="'+ (current.Y) +'" r="4"/>';
+			var index = ""
+			if(i<10){
+				index ="0" + i;
+			}
+			else{
+				index = i;
+			}
+			result += '<circle id="circle_'+ index +'"style="fill: ' + circleColor + ';" cx="'+ (current.X) +'" cy="'+ (current.Y) +'" r="4"/>';
 			if(i < (data.length - 1)){
-				result += '<line id="line_'+ i +'" style="stroke: ' + lineColor + ';" x1="'+ ((current.X)+5)  +'" y1="'+ (current.Y)  +'" x2="'+ (data[(i + 1)].X) +'" y2="'+ (data[(i + 1)].Y) +'"/>';
+				result += '<line id="line_'+ index +'" style="stroke: ' + lineColor + ';" x1="'+ ((current.X)+5)  +'" y1="'+ (current.Y)  +'" x2="'+ (data[(i + 1)].X) +'" y2="'+ (data[(i + 1)].Y) +'"/>';
 			}
 			document.getElementById("mySVG").innerHTML += result;
+			$("#DialogWindow").remove();
 		}
 	}
 });
