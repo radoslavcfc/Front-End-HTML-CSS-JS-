@@ -1,0 +1,101 @@
+		#content::after {
+				content: "";
+				background: url(\math.jpg);
+				opacity: 0.3;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				right: 0;
+				position: absolute;
+				z-index: -1;   
+		}
+		
+		#content{
+			margin: 40px auto;
+			width:900px;
+		}
+			
+		#mySVG{
+			background-color: #F8F8FF;
+			border: solid;
+			position: relative;
+			width: 500px;
+			height: 300px;
+		}
+		
+		#generateButton{
+			margin: 50px 130px;
+			height: 60px;
+			width: 200px;
+			color: lightgrey;
+			background-color: green;
+			border-radius: 5px;
+		}
+		
+		#circlesColor, #linesColor{
+			width: 100px;
+		}
+		
+		line, circle {
+			stroke-width: 2;
+		}
+		
+		circle{
+			stroke: silver;
+		}
+		
+		#primeButtons{
+			float:right
+		}
+		
+		#colorControl{
+			background-color: #E0E0E0;
+			border: dotted 0.5px;
+			border-radius: 5px;
+			padding: 30px 30px 20px;
+		}
+		
+		#DialogWindow {
+			background-color: #F8F8F8;
+			height: 120px;
+			margin-top: 30px;
+			border: dotted 1px grey;
+			padding: 5px 30px;
+		}
+		
+		#colorChange{
+			background: linear-gradient(to bottom, #BEBEBE 0%, #585858 100%);
+			color: #F8F8F8;
+			box-shadow: 1px 1px grey;
+			border-radius: 10px;
+			width: 80px;
+			height: 30px;
+			margin-left: 50px;	
+		}
+		
+		#Jvalue{
+			margin-left: 50px;
+		}
+		
+		#CancelButton, #OkButton{
+			background-color: silver;
+			width: 70px;
+			height: 30px;
+			margin: 10px;
+		}
+		
+		#NewY{
+			width: 40px;
+		}
+		
+		#NewY:active{
+			background-color:silver;
+			}
+		
+		.XandY{
+			position: absolute;
+			font-size: x-large;
+			color: black;
+			background-color: #7FFF00;
+			font-weight: bold;
+		}
